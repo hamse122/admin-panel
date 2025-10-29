@@ -1,11 +1,15 @@
 import React from 'react'
+import { useApp } from '../context/AppContext'
 
-const CardBox = () => {
+const CardBox = ({ stats: statsProp }) => {
+  const { stats: contextStats } = useApp()
+  const stats = statsProp || contextStats
+
   const cards = [
-    { number: '1,504', name: 'Daily Views', icon: 'eye-outline' },
-    { number: '80', name: 'Sales', icon: 'cart-outline' },
-    { number: '284', name: 'Comments', icon: 'chatbubbles-outline' },
-    { number: '$7,842', name: 'Earning', icon: 'cash-outline' },
+    { number: stats.dailyViews.toLocaleString(), name: 'Daily Views', icon: 'eye-outline' },
+    { number: stats.sales.toString(), name: 'Sales', icon: 'cart-outline' },
+    { number: stats.comments.toString(), name: 'Comments', icon: 'chatbubbles-outline' },
+    { number: `$${stats.earning.toLocaleString()}`, name: 'Earning', icon: 'cash-outline' },
   ]
 
   return (

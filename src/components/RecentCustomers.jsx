@@ -1,16 +1,10 @@
 import React from 'react'
+import { useApp } from '../context/AppContext'
 
 const RecentCustomers = () => {
-  const customers = [
-    { name: 'David', country: 'Italy', image: 'assets/imgs/customer02.jpg' },
-    { name: 'Amit', country: 'India', image: 'assets/imgs/customer01.jpg' },
-    { name: 'David', country: 'Italy', image: 'assets/imgs/customer02.jpg' },
-    { name: 'Amit', country: 'India', image: 'assets/imgs/customer01.jpg' },
-    { name: 'David', country: 'Italy', image: 'assets/imgs/customer02.jpg' },
-    { name: 'Amit', country: 'India', image: 'assets/imgs/customer01.jpg' },
-    { name: 'David', country: 'Italy', image: 'assets/imgs/customer01.jpg' },
-    { name: 'Amit', country: 'India', image: 'assets/imgs/customer02.jpg' },
-  ]
+  const { customers } = useApp()
+  
+  const recentCustomers = customers.slice(0, 8)
 
   return (
     <div className="recentCustomers">
@@ -20,11 +14,11 @@ const RecentCustomers = () => {
 
       <table>
         <tbody>
-          {customers.map((customer, index) => (
-            <tr key={index}>
+          {recentCustomers.map((customer) => (
+            <tr key={customer.id}>
               <td width="60px">
                 <div className="imgBx">
-                  <img src={customer.image} alt={customer.name} />
+                  <img src={customer.avatar} alt={customer.name} />
                 </div>
               </td>
               <td>
@@ -35,6 +29,13 @@ const RecentCustomers = () => {
               </td>
             </tr>
           ))}
+          {recentCustomers.length === 0 && (
+            <tr>
+              <td colSpan="2" style={{ textAlign: 'center', padding: '20px', color: '#999' }}>
+                No customers found
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

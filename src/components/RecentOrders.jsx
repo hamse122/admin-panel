@@ -1,16 +1,10 @@
 import React from 'react'
+import { useApp } from '../context/AppContext'
 
 const RecentOrders = () => {
-  const orders = [
-    { name: 'Star Refrigerator', price: '$1200', payment: 'Paid', status: 'delivered' },
-    { name: 'Dell Laptop', price: '$110', payment: 'Due', status: 'pending' },
-    { name: 'Apple Watch', price: '$1200', payment: 'Paid', status: 'return' },
-    { name: 'Addidas Shoes', price: '$620', payment: 'Due', status: 'inProgress' },
-    { name: 'Star Refrigerator', price: '$1200', payment: 'Paid', status: 'delivered' },
-    { name: 'Dell Laptop', price: '$110', payment: 'Due', status: 'pending' },
-    { name: 'Apple Watch', price: '$1200', payment: 'Paid', status: 'return' },
-    { name: 'Addidas Shoes', price: '$620', payment: 'Due', status: 'inProgress' },
-  ]
+  const { orders, getCustomerById } = useApp()
+  
+  const recentOrders = orders.slice(0, 8)
 
   return (
     <div className="recentOrders">
@@ -29,20 +23,30 @@ const RecentOrders = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order, index) => (
-            <tr key={index}>
-              <td>{order.name}</td>
-              <td>{order.price}</td>
-              <td>{order.payment}</td>
-              <td>
-                <span className={`status ${order.status}`}>
-                  {order.status === 'delivered' ? 'Delivered' :
-                   order.status === 'pending' ? 'Pending' :
-                   order.status === 'return' ? 'Return' : 'In Progress'}
-                </span>
+          {recentOrders.map((order) => {
+            const customer = getCustomerById(order.customerId)
+            return (
+              <tr key={order.id}>
+                <td>{order.name}</td>
+                <td>${order.price}</td>
+                <td>{order.payment}</td>
+                <td>
+                  <span className={`status ${order.status}`}>
+                    {order.status === 'delivered' ? 'Delivered' :
+                     order.status === 'pending' ? 'Pending' :
+                     order.status === 'return' ? 'Return' : 'In Progress'}
+                  </span>
+                </td>
+              </tr>
+            )
+          })}
+          {recentOrders.length === 0 && (
+            <tr>
+              <td colSpan="4" style={{ textAlign: 'center', padding: '20px', color: '#999' }}>
+                No orders found
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
